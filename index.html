@@ -49,28 +49,6 @@
     position: relative;
   }
 
-  .rainbow-row {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    gap: 9px;
-    margin-bottom: 16px;
-  }
-  .rainbow-row span {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    display: inline-block;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.18);
-  }
-  .rainbow-row span:nth-child(1) { background: #e0433a; transform: translateY(6px); }
-  .rainbow-row span:nth-child(2) { background: #f08a2e; transform: translateY(1px); }
-  .rainbow-row span:nth-child(3) { background: #f4cf3c; transform: translateY(-2px); }
-  .rainbow-row span:nth-child(4) { background: #4caf50; transform: translateY(-3px); }
-  .rainbow-row span:nth-child(5) { background: #2f8fd6; transform: translateY(-2px); }
-  .rainbow-row span:nth-child(6) { background: #3f51b5; transform: translateY(1px); }
-  .rainbow-row span:nth-child(7) { background: #8e3fa8; transform: translateY(6px); }
-
   .hero-eyebrow {
     font-family: 'Caveat', cursive;
     font-size: 22px;
@@ -95,7 +73,6 @@
     line-height: 1.6;
   }
 
-  /* ---------- Note to students ---------- */
   .note {
     background: rgba(255,255,255,0.12);
     border: 1px solid rgba(255,255,255,0.22);
@@ -110,7 +87,6 @@
     font-size: 13px;
     line-height: 1.65;
     margin: 0;
-    max-width: none;
   }
   .note p + p { margin-top: 8px; }
   .note .sign {
@@ -176,17 +152,6 @@
     color: var(--ink);
   }
 
-  .field-error {
-    display: none;
-    font-size: 12px;
-    color: var(--error);
-    margin-top: 5px;
-  }
-  input:not(:placeholder-shown):invalid ~ .field-error,
-  select.touched-invalid ~ .field-error { display: block; }
-
-  .help-text { font-size: 12px; color: var(--ink-soft); margin-top: 5px; }
-
   /* ---------- Payment ---------- */
   .payment-box {
     background: var(--green-100);
@@ -197,33 +162,27 @@
     text-align: center;
   }
 
-  /* NEW DIRECT APP BUTTONS */
-  .app-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-bottom: 6px;
-  }
-  .app-btn {
+  /* NATIVE HTML LINK BUTTON */
+  .btn-native-pay {
     background: #000;
     color: #fff;
     border: none;
-    padding: 12px 0;
-    border-radius: 10px;
-    font-size: 13px;
+    padding: 15px 16px;
+    width: 100%;
+    border-radius: 12px;
+    font-size: 15px;
     font-weight: 600;
     font-family: inherit;
     cursor: pointer;
+    margin-bottom: 6px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     transition: transform 0.1s;
   }
-  .app-btn:active { transform: scale(0.95); }
-  .app-info {
-    font-size: 11.5px;
-    color: var(--green-900);
-    margin-top: 8px;
-    margin-bottom: 4px;
-    font-weight: 500;
-  }
+  .btn-native-pay:active { transform: scale(0.98); }
 
   .qr-container {
     display: flex;
@@ -353,9 +312,6 @@
 
 <div class="page">
   <div class="hero">
-    <div class="rainbow-row" aria-hidden="true">
-      <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    </div>
     <p class="hero-eyebrow">Happy Teachers' Day</p>
     <h1>Teachers' Day Celebration</h1>
     <p>A small contribution from all of us, to put together a day our teachers actually remember.</p>
@@ -389,12 +345,12 @@
 
       <div class="payment-box">
         
-        <div class="app-row">
-          <button type="button" class="app-btn" onclick="openApp('tez://')">GPay</button>
-          <button type="button" class="app-btn" onclick="openApp('phonepe://')">PhonePe</button>
-          <button type="button" class="app-btn" onclick="openApp('paytmmp://')">Paytm</button>
+        <a href="upi://pay?pa=munderushikesh66@okicici&pn=Class%20Collection" class="btn-native-pay" onclick="markPaymentInitiated()">
+          ⚡ Pay via UPI App (GPay/PhonePe)
+        </a>
+        <div style="font-size: 11.5px; color: var(--green-900); margin-top: 4px; font-weight: 500;">
+          Your UPI app will open. You just need to enter the amount manually.
         </div>
-        <div class="app-info" id="appInfoText">Tapping an app will copy the UPI ID automatically.</div>
 
         <div class="divider">or scan QR manually</div>
 
@@ -440,30 +396,6 @@
 
   let paymentInitiated = false;
 
-  // Function to copy ID and instantly open the specific app scheme
-  function openApp(scheme) {
-    const amountInput = document.getElementById('amount');
-    if (!amountInput.checkValidity()) {
-        amountInput.reportValidity();
-        return;
-    }
-
-    paymentInitiated = true;
-    
-    // Copy ID then trigger app redirect
-    navigator.clipboard.writeText(upiID).then(() => {
-      document.getElementById('appInfoText').innerText = "✅ ID Copied! Paste it in the app.";
-      document.getElementById('appInfoText').style.color = "var(--ok)";
-      
-      // Force app open
-      window.location.href = scheme;
-      
-    }).catch(err => {
-      // Fallback if clipboard fails
-      window.location.href = scheme;
-    });
-  }
-
   function markPaymentInitiated() {
     paymentInitiated = true;
   }
@@ -485,6 +417,7 @@
     });
   }
 
+  // Detect when they come back to the browser from their payment app
   document.addEventListener('visibilitychange', function () {
     if (document.visibilityState === 'visible' && paymentInitiated) {
       const banner = document.getElementById('welcomeBack');
