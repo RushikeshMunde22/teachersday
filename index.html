@@ -214,7 +214,7 @@
     text-align: center;
   }
 
-  /* UPDATED AUTOPAY BUTTON CSS - Solid Black & White */
+  /* AUTOPAY BUTTON */
   .btn-autopay {
     background: #000000;
     color: #ffffff;
@@ -287,64 +287,10 @@
     font-family: inherit;
     cursor: pointer;
     word-break: break-all;
+    transition: background 0.15s;
   }
   .btn-secondary:hover { border-color: var(--green-700); }
   .btn-secondary strong { color: var(--green-700); }
-
-  /* ---------- Custom Popup Modal Overlay ---------- */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    justify-content: center;
-    align-items: center;
-    padding: 16px;
-  }
-  .modal-content {
-    background: #fff;
-    width: 100%;
-    max-width: 360px;
-    border-radius: 16px;
-    padding: 24px;
-    text-align: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    animation: popIn 0.2s ease-out;
-  }
-  @keyframes popIn {
-    0% { transform: scale(0.9); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-  }
-  .modal-title { font-family: 'Fraunces', serif; font-size: 18px; color: var(--green-900); margin: 0 0 8px; }
-  .modal-desc { font-size: 13px; color: var(--ink-soft); margin: 0 0 16px; line-height: 1.5; white-space: pre-wrap; }
-  .app-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
-  .app-link-btn {
-    background: var(--green-100);
-    border: 1.5px solid var(--line);
-    padding: 12px;
-    border-radius: 10px;
-    color: var(--green-900);
-    font-weight: 600;
-    font-size: 14px;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    transition: background 0.15s;
-  }
-  .app-link-btn:hover { background: var(--green-400); color: #fff; }
-  .modal-close {
-    background: #e5e7eb;
-    border: none;
-    padding: 10px;
-    width: 100%;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    color: var(--ink);
-  }
 
   /* ---------- Trust strip ---------- */
   .trust-strip {
@@ -509,7 +455,7 @@
 
       <div class="payment-box">
         
-        <!-- AUTO PAY BUTTON (Updated Black & White) -->
+        <!-- AUTO PAY BUTTON -->
         <button type="button" class="btn-autopay" onclick="autoPay()">
           ⚡ Pay Automatically
         </button>
@@ -520,15 +466,16 @@
           <img src="qr.png" alt="Payment QR Code">
         </div>
         
-        <!-- Download QR button -->
-        <a href="qr.png" download="Teachers_Day_QR.png" class="btn-download" onclick="openDownloadModal(event)">
+        <!-- Download QR button (Fully Manual now) -->
+        <a href="qr.png" download="Teachers_Day_QR.png" class="btn-download" onclick="markPaymentInitiated()">
            Download QR Code to Gallery
         </a>
         <div class="help-text" style="margin-top:-6px; margin-bottom:10px;">Download this QR, then open GPay/PhonePe and select "Scan QR from Gallery".</div>
 
         <div class="divider">or copy UPI ID</div>
 
-        <button type="button" class="btn-secondary" onclick="copyUPI()">
+        <!-- Copy UPI Button (Fully Manual now) -->
+        <button type="button" id="copyUpiBtn" class="btn-secondary" onclick="copyUPI()">
           Copy UPI ID — <strong>munderushikesh66@okicici</strong>
         </button>
       </div>
@@ -570,36 +517,13 @@
   </div>
 </div>
 
-<!-- Custom App Launcher Popup Modal -->
-<div id="appModal" class="modal-overlay">
-  <div class="modal-content">
-    <h3 class="modal-title" id="modalTitle">Ready to Open App</h3>
-    <p class="modal-desc" id="modalDesc">Select an app below to open it instantly:</p>
-    <div class="app-grid">
-      <a href="#" id="gpayLink" class="app-link-btn">Google Pay</a>
-      <a href="#" id="phonepeLink" class="app-link-btn">PhonePe</a>
-      <a href="#" id="paytmLink" class="app-link-btn">Paytm</a>
-      <a href="#" id="bhimLink" class="app-link-btn">BHIM UPI</a>
-    </div>
-    <button type="button" class="modal-close" onclick="closeModal()">Close / Return to Form</button>
-  </div>
-</div>
-
 <script>
   const upiID = "munderushikesh66@okicici";
   const googleScriptURL = "https://script.google.com/macros/s/AKfycbxw8E50kLK0PoHMGx2YsAQ2havy0N5lWtuhYIVVQzq7HI2YAZlw2h4PCqsutn83lvbyUA/exec";
 
   let paymentInitiated = false;
 
-  // Uses raw application schemas so apps just open cleanly with NO pre-filled UPI links.
-  function updateAppLinks() {
-    document.getElementById('gpayLink').href = "tez://";         // Opens GPay directly
-    document.getElementById('phonepeLink').href = "phonepe://";   // Opens PhonePe directly
-    document.getElementById('paytmLink').href = "paytmmp://";     // Opens Paytm directly
-    document.getElementById('bhimLink').href = "upi://";          // Opens generic UPI app picker
-  }
-
-  // AUTO PAY FUNCTION (Updated to copy instantly & instruct manual paste)
+  // 1. AUTO PAY: Copies ID instantly and forces phone to open app picker
   function autoPay() {
     const amountInput = document.getElementById('amount');
     if (!amountInput.checkValidity()) {
@@ -609,41 +533,36 @@
 
     paymentInitiated = true;
     
-    // Attempt to copy the UPI ID directly on click
+    // Copy the UPI ID to clipboard
     navigator.clipboard.writeText(upiID).then(() => {
-      updateAppLinks();
-      document.getElementById('modalTitle').innerText = "UPI ID Copied! ✅";
-      document.getElementById('modalDesc').innerText = "Since personal UPI accounts don't allow auto-fill, your UPI ID is copied.\n\nOpen your app below, PASTE the UPI ID, and enter the amount manually.";
-      document.getElementById('appModal').style.display = 'flex';
+      // Trigger the native Android/iOS UPI app selection sheet
+      window.location.href = "upi://";
     }).catch(err => {
-      // Fallback if the browser blocks the clipboard feature
-      updateAppLinks();
-      document.getElementById('modalTitle').innerText = "Pay Manually";
-      document.getElementById('modalDesc').innerText = "Please copy this UPI ID: " + upiID + "\n\nThen select an app below, paste the ID, and enter the amount.";
-      document.getElementById('appModal').style.display = 'flex';
+      alert("Clipboard access denied. Please copy manually.");
     });
   }
 
-  function openDownloadModal(e) {
+  // 2. DOWNLOAD QR: Just sets the flag so the UI knows they started the process
+  function markPaymentInitiated() {
     paymentInitiated = true;
-    updateAppLinks();
-    document.getElementById('modalTitle').innerText = "QR Downloaded! 📥";
-    document.getElementById('modalDesc').innerText = "Open your app below, select 'Scan QR', and choose the image from your gallery. Enter the amount manually.";
-    document.getElementById('appModal').style.display = 'flex';
   }
 
+  // 3. COPY UPI: Pure manual copy with visual button feedback
   function copyUPI() {
     paymentInitiated = true;
-    updateAppLinks();
     navigator.clipboard.writeText(upiID).then(() => {
-      document.getElementById('modalTitle').innerText = "UPI ID Copied! ✅";
-      document.getElementById('modalDesc').innerText = "UPI ID: " + upiID + "\n\nTap your preferred app below to open it, paste the ID, and enter the amount.";
-      document.getElementById('appModal').style.display = 'flex';
+      const btn = document.getElementById('copyUpiBtn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = "Copied! <strong>Paste in your app</strong>";
+      btn.style.borderColor = "var(--green-700)";
+      btn.style.background = "var(--green-100)";
+      
+      setTimeout(() => { 
+        btn.innerHTML = originalText; 
+        btn.style.borderColor = "var(--line)";
+        btn.style.background = "#fff";
+      }, 3000);
     });
-  }
-
-  function closeModal() {
-    document.getElementById('appModal').style.display = 'none';
   }
 
   // Detect when students switch back from their payment app manually
