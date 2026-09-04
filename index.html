@@ -84,7 +84,6 @@
     font-size: 29px;
     color: #ffffff;
     margin: 0 0 10px;
-    letter-spacing: 0.2px;
   }
 
   .hero p {
@@ -131,7 +130,6 @@
     border-radius: 0 0 20px 20px;
     padding: 26px 28px 30px;
     box-shadow: 0 16px 36px rgba(31,92,34,0.16);
-    position: relative;
   }
 
   .stage {
@@ -176,19 +174,6 @@
     font-family: inherit;
     background: #fff;
     color: var(--ink);
-    transition: border-color 0.15s, box-shadow 0.15s;
-  }
-
-  input:focus, select:focus {
-    outline: none;
-    border-color: var(--green-700);
-    box-shadow: 0 0 0 3px rgba(57,146,56,0.15);
-  }
-
-  input:not(:placeholder-shown):invalid,
-  select.touched-invalid {
-    border-color: var(--error);
-    box-shadow: 0 0 0 3px rgba(179,65,58,0.12);
   }
 
   .field-error {
@@ -198,9 +183,7 @@
     margin-top: 5px;
   }
   input:not(:placeholder-shown):invalid ~ .field-error,
-  select.touched-invalid ~ .field-error {
-    display: block;
-  }
+  select.touched-invalid ~ .field-error { display: block; }
 
   .help-text { font-size: 12px; color: var(--ink-soft); margin-top: 5px; }
 
@@ -214,27 +197,33 @@
     text-align: center;
   }
 
-  /* AUTOPAY BUTTON */
-  .btn-autopay {
-    background: #000000;
-    color: #ffffff;
+  /* NEW DIRECT APP BUTTONS */
+  .app-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .app-btn {
+    background: #000;
+    color: #fff;
     border: none;
-    padding: 15px 16px;
-    width: 100%;
-    border-radius: 12px;
-    font-size: 15px;
+    padding: 12px 0;
+    border-radius: 10px;
+    font-size: 13px;
     font-weight: 600;
     font-family: inherit;
     cursor: pointer;
-    margin-bottom: 6px;
-    transition: background 0.15s, transform 0.1s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+    transition: transform 0.1s;
   }
-  .btn-autopay:hover { background: #222222; }
-  .btn-autopay:active { transform: scale(0.98); }
+  .app-btn:active { transform: scale(0.95); }
+  .app-info {
+    font-size: 11.5px;
+    color: var(--green-900);
+    margin-top: 8px;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
 
   .qr-container {
     display: flex;
@@ -261,9 +250,7 @@
     margin-bottom: 12px;
     text-decoration: none;
     display: inline-block;
-    transition: background 0.15s;
   }
-  .btn-download:hover { background: var(--green-900); }
 
   .divider {
     display: flex;
@@ -287,12 +274,9 @@
     font-family: inherit;
     cursor: pointer;
     word-break: break-all;
-    transition: background 0.15s;
   }
-  .btn-secondary:hover { border-color: var(--green-700); }
   .btn-secondary strong { color: var(--green-700); }
 
-  /* ---------- Trust strip ---------- */
   .trust-strip {
     display: flex;
     align-items: flex-start;
@@ -303,10 +287,8 @@
     padding: 11px 12px;
     margin-top: 16px;
   }
-  .trust-strip svg { flex-shrink: 0; margin-top: 1px; }
   .trust-strip span { font-size: 12.5px; color: var(--green-900); line-height: 1.5; }
 
-  /* ---------- Confirm ---------- */
   .welcome-back {
     display: none;
     background: var(--green-100);
@@ -328,7 +310,6 @@
     padding: 13px;
     border-radius: 10px;
     border: 1px solid var(--line);
-    transition: box-shadow 0.2s, border-color 0.2s;
   }
   .checkbox-container.highlight {
     border-color: var(--green-700);
@@ -337,12 +318,11 @@
   .checkbox-container input {
     margin-top: 3px;
     margin-right: 10px;
-    cursor: pointer;
     width: 17px;
     height: 17px;
     accent-color: var(--green-700);
   }
-  .checkbox-container label { margin: 0; font-size: 13.5px; cursor: pointer; color: var(--green-900); font-weight: 500; }
+  .checkbox-container label { margin: 0; font-size: 13.5px; color: var(--green-900); font-weight: 500; }
 
   .btn-submit {
     background: var(--ok);
@@ -356,10 +336,7 @@
     font-family: inherit;
     cursor: pointer;
     margin-top: 8px;
-    transition: background 0.15s;
   }
-  .btn-submit:hover { background: var(--green-900); }
-  .btn-submit:disabled { background: #b6c4ac; cursor: not-allowed; }
 
   #successMessage {
     display: none;
@@ -370,32 +347,6 @@
     background: var(--ok-bg);
     border: 1px solid var(--line);
   }
-  #successMessage .tick {
-    width: 40px; height: 40px; margin: 0 auto 10px;
-    border-radius: 50%;
-    background: var(--ok);
-    display: flex; align-items: center; justify-content: center;
-  }
-  #successMessage h3 { font-family: 'Fraunces', serif; font-size: 18px; color: var(--green-900); margin: 0 0 4px; }
-  #successMessage p { font-size: 13.5px; color: var(--ink-soft); margin: 0; }
-
-  .contact-strip {
-    margin-top: 20px;
-    text-align: center;
-    padding-top: 16px;
-    border-top: 1px solid var(--line);
-  }
-  .contact-strip p { font-size: 12.5px; color: var(--ink-soft); margin: 0 0 6px; }
-  .contact-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13.5px;
-    font-weight: 600;
-    color: var(--green-900);
-    text-decoration: none;
-  }
-  .contact-link:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -408,11 +359,6 @@
     <p class="hero-eyebrow">Happy Teachers' Day</p>
     <h1>Teachers' Day Celebration</h1>
     <p>A small contribution from all of us, to put together a day our teachers actually remember.</p>
-
-    <div class="note">
-      <p>We get it — forms and collections aren't anyone's favourite part of the week, and Teachers' Day can feel like just another thing on the calendar.</p>
-      <p>Your ₹30 turns an ordinary Tuesday into the one class they'll talk about at home that evening. Come for the celebration — it'll be worth showing up for. <span class="sign">— see you there</span></p>
-    </div>
   </div>
 
   <div class="swatch-ribbon" aria-hidden="true"></div>
@@ -423,42 +369,32 @@
       <div class="stage"><span class="num">1</span><span class="label">Your details</span></div>
 
       <label for="name">Full name</label>
-      <input type="text" id="name" placeholder="Enter your full name"
-             pattern="[A-Za-z\s]+"
-             title="Please enter only letters and spaces. No numbers or special characters."
-             required>
-      <div class="field-error">Letters and spaces only — no numbers or symbols.</div>
-
+      <input type="text" id="name" placeholder="Enter your full name" pattern="[A-Za-z\s]+" required>
+      
       <label for="division">Division</label>
       <select id="division" required>
         <option value="">Select your division</option>
         <option value="A">Division A</option>
         <option value="B">Division B</option>
         <option value="C">Division C</option>
-        <option value="D">Division D</option>
-        <option value="E">Division E</option>
-        <option value="F">Division F</option>
-        <option value="G">Division G</option>
       </select>
-      <div class="field-error">Please select your division.</div>
 
       <label for="roll">Roll number</label>
       <input type="number" id="roll" placeholder="e.g. 42" min="1" step="1" required>
-      <div class="field-error">Enter a valid roll number (whole number, greater than 0).</div>
 
       <label for="amount">Amount (₹)</label>
       <input type="number" id="amount" value="30" min="30" step="1" required>
-      <div class="help-text">Standard contribution is ₹30. Edit this if you'd like to give more.</div>
-      <div class="field-error">Amount must be ₹30 or more, in whole rupees.</div>
 
       <div class="stage"><span class="num">2</span><span class="label">Send the payment</span></div>
 
       <div class="payment-box">
         
-        <!-- AUTO PAY BUTTON -->
-        <button type="button" class="btn-autopay" onclick="autoPay()">
-          ⚡ Pay Automatically
-        </button>
+        <div class="app-row">
+          <button type="button" class="app-btn" onclick="openApp('tez://')">GPay</button>
+          <button type="button" class="app-btn" onclick="openApp('phonepe://')">PhonePe</button>
+          <button type="button" class="app-btn" onclick="openApp('paytmmp://')">Paytm</button>
+        </div>
+        <div class="app-info" id="appInfoText">Tapping an app will copy the UPI ID automatically.</div>
 
         <div class="divider">or scan QR manually</div>
 
@@ -466,23 +402,15 @@
           <img src="qr.png" alt="Payment QR Code">
         </div>
         
-        <!-- Download QR button (Fully Manual now) -->
         <a href="qr.png" download="Teachers_Day_QR.png" class="btn-download" onclick="markPaymentInitiated()">
            Download QR Code to Gallery
         </a>
-        <div class="help-text" style="margin-top:-6px; margin-bottom:10px;">Download this QR, then open GPay/PhonePe and select "Scan QR from Gallery".</div>
 
         <div class="divider">or copy UPI ID</div>
 
-        <!-- Copy UPI Button (Fully Manual now) -->
         <button type="button" id="copyUpiBtn" class="btn-secondary" onclick="copyUPI()">
           Copy UPI ID — <strong>munderushikesh66@okicici</strong>
         </button>
-      </div>
-
-      <div class="trust-strip">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 5v6c0 5.5 3.4 9.7 8 11 4.6-1.3 8-5.5 8-11V5l-8-3z" stroke="#1f5c22" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#1f5c22" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span>Payments go straight to the class collection account, and every entry is checked by hand before it's marked received.</span>
       </div>
 
       <div class="stage" id="confirmStage"><span class="num">3</span><span class="label">Confirm &amp; submit</span></div>
@@ -500,19 +428,8 @@
     </form>
 
     <div id="successMessage">
-      <div class="tick">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
       <h3>Details submitted</h3>
       <p>Thanks for chipping in. Your payment is pending manual verification.</p>
-    </div>
-
-    <div class="contact-strip">
-      <p>Payment not going through, or something look off?</p>
-      <a class="contact-link" href="tel:7720824756">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z" stroke="#1f5c22" stroke-width="1.6" stroke-linejoin="round"/></svg>
-        Contact 7720824756
-      </a>
     </div>
   </div>
 </div>
@@ -523,8 +440,8 @@
 
   let paymentInitiated = false;
 
-  // 1. AUTO PAY: Copies ID instantly and forces phone to open app picker
-  function autoPay() {
+  // Function to copy ID and instantly open the specific app scheme
+  function openApp(scheme) {
     const amountInput = document.getElementById('amount');
     if (!amountInput.checkValidity()) {
         amountInput.reportValidity();
@@ -533,21 +450,24 @@
 
     paymentInitiated = true;
     
-    // Copy the UPI ID to clipboard
+    // Copy ID then trigger app redirect
     navigator.clipboard.writeText(upiID).then(() => {
-      // Trigger the native Android/iOS UPI app selection sheet
-      window.location.href = "upi://";
+      document.getElementById('appInfoText').innerText = "✅ ID Copied! Paste it in the app.";
+      document.getElementById('appInfoText').style.color = "var(--ok)";
+      
+      // Force app open
+      window.location.href = scheme;
+      
     }).catch(err => {
-      alert("Clipboard access denied. Please copy manually.");
+      // Fallback if clipboard fails
+      window.location.href = scheme;
     });
   }
 
-  // 2. DOWNLOAD QR: Just sets the flag so the UI knows they started the process
   function markPaymentInitiated() {
     paymentInitiated = true;
   }
 
-  // 3. COPY UPI: Pure manual copy with visual button feedback
   function copyUPI() {
     paymentInitiated = true;
     navigator.clipboard.writeText(upiID).then(() => {
@@ -565,7 +485,6 @@
     });
   }
 
-  // Detect when students switch back from their payment app manually
   document.addEventListener('visibilitychange', function () {
     if (document.visibilityState === 'visible' && paymentInitiated) {
       const banner = document.getElementById('welcomeBack');
@@ -578,21 +497,11 @@
   });
 
   const form = document.getElementById('collectionForm');
-  const divisionEl = document.getElementById('division');
-
-  divisionEl.addEventListener('blur', function () {
-    divisionEl.classList.toggle('touched-invalid', !divisionEl.checkValidity());
-  });
-  divisionEl.addEventListener('change', function () {
-    divisionEl.classList.toggle('touched-invalid', !divisionEl.checkValidity());
-  });
-
+  
   form.addEventListener('submit', function(e) {
     e.preventDefault();
-
     if (!form.checkValidity()) {
       form.reportValidity();
-      divisionEl.classList.toggle('touched-invalid', !divisionEl.checkValidity());
       return;
     }
 
@@ -615,7 +524,7 @@
       form.style.display = 'none';
       document.getElementById('successMessage').style.display = 'block';
     }).catch(error => {
-      alert("Something went wrong. Please check your internet connection.");
+      alert("Something went wrong.");
       submitBtn.innerText = "Submit details";
       submitBtn.disabled = false;
     });
